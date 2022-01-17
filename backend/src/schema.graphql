@@ -1,0 +1,83 @@
+type Query{
+    requestLogin(user_name: String!, user_pass: String!): User
+    requestAuth(user_email: String!, code: String!): Boolean!
+    requestExisting(user_name: String!, user_email: String!): Boolean!
+    requestUser(user_id: String): User
+    getRoom(room_id: String): Room
+    getGame(game_id: String): Game
+    getMail(email: String): [Mail]
+    requestWaitingRoom: String
+    getHistory(player_id: String): [History]
+    BackRoom(user_id: String): Room
+    getUserName(user_id: String): String
+}
+
+type Mutation{
+    createAccount(user_name:String!, user_pass:String!, user_email:String!): User!
+    createAuth(user_email: String!): Boolean!
+    createRoom(user_id: String!): Room!
+    joinRoom(user_id: String, room_link: String): Room
+    deleteRoom(room_id: String!): Boolean!
+    leaveRoom(user_id: String, room_id: String): Boolean!
+    userReady(user_id: String, room_id: String): Room
+    userunReady(user_id: String, room_id: String): Room
+    createGame(room_id: String, player1: String, player2: String) : Game
+    action(game_id: String, player_id: String!, player_move: [Int]): Game
+    sendMail(from_email: String, to_email: String, room_link: String): Mail
+    removeMail(id: String): Boolean
+    lockRoom(room_id: String): Room
+    createHistory(player1: String, player2: String, room_id: String, game_result: String): History
+    FinishGame(game_id: String, player1:String, player2: String, room_id: String, game_result: String): Room
+    EndGame(game_id: String, game_result: String): Game
+}
+
+type Subscription{
+    roomJoined: Room
+    userStateChange: Room
+    gameStateChange: Game
+    roomStateChange: Room
+    mailStateChange: Mail
+    userLeaved: Room
+}
+
+type User{
+    user_id: String!
+    user_name: String!
+    user_email: String!
+    user_rating: String!
+    user_online: Boolean!
+}
+
+type Room{
+    owner: String
+    joiner: String
+    room_id: String
+    room_link: String
+    room_game: String
+    room_onready: [Boolean!]
+    room_lock: Boolean
+}
+
+type Game{
+    player1: String!
+    player2: String!
+    turn: String!
+    chess: [[String!]]
+    isEnd: String
+    id: String
+    room_id: String
+}
+
+type Mail{
+    from_email: String
+    to_email: String
+    content: String
+    id: String
+}
+
+type History{
+    room_id: String
+    game_result: String
+    player1: String
+    player2: String
+}
